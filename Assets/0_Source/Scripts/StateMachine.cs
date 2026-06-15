@@ -20,11 +20,14 @@ public class StateMachine
 {
     private State currentState;
 
-    public void ChangeState<TState>(TState newState) where TState : State
+    public void ChangeState(State state)
     {
-        if (currentState != null)
-            currentState.Exit();
-        currentState = newState;
+        if (state == null)
+            throw new System.ArgumentNullException(nameof(state),
+                "ChangeState получил null: состояние не создано в Awake().");
+
+        currentState?.Exit();
+        currentState = state;
         currentState.Enter();
     }
 

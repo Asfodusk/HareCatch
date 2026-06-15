@@ -1,52 +1,155 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Playables;
+using System.Collections;
+using System;
+
+public class Ignor : State<Ignor>
+{
+    protected override void OnEnter() { }
+    protected override void OnUpdate(float deltaTime) { }
+    protected override void OnExit() { }
+}
+public class Idle : State<Idle>
+{
+    protected readonly Player player;
+    public Idle(Player player) { this.player = player; }
+
+    protected override void OnEnter() { }
+
+
+    protected override void OnUpdate(float deltaTime)
+    {
+        // Повороты A / D
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            player.RotateY(-90f, player.facingpassengers);
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            player.RotateY(+90f, player.facingpassengers);
+            return;
+        }
+
+        // Движение W / S по направлению взгляда (локальный X)
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            if (player.CanMoveInDirection(+1))
+            {
+                player.moveDirection = +1;
+                player.statemachine.ChangeState(player.moving);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            if (player.CanMoveInDirection(-1))
+            {
+                player.moveDirection = -1;
+                player.statemachine.ChangeState(player.moving);
+            }
+        }
+    }
+
+
+    protected override void OnExit() { }
+}
+
+
+public class FacingPassengers : State<FacingPassengers>
+{
+    protected readonly Player player;
+    public FacingPassengers(Player player) { this.player = player; }
+
+
+    protected override void OnEnter() { }
+    protected override void OnUpdate(float deltaTime)
+    {
+        //В этом состоянии игнорируем движение W / S, но реагируем на A / D, чтобы развернуться дальше
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            player.RotateY(-90f, player.idle);
+            return;
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            player.RotateY(+90f, player.idle);
+            return;
+        }
+    }
+    protected override void OnExit()
+    {
+    }
+}
+
+
+public class Moving : State<Moving>
+{
+    protected readonly Player player;
+    public Moving(Player player) { this.player = player; }
+
+
+    protected override void OnEnter() { }
+    protected override void OnUpdate(float deltaTime)
+    {
+        // Пока идём — ввод игнорируем
+        if (!player.CanMoveInDirection(player.moveDirection))
+        {
+            player.statemachine.ChangeState(player.idle);
+            player.moveDirection = 0;
+            return;
+        }
+
+        // Движение по локальной оси X (right) — вперёд/назад по взгляду
+        Vector3 move = Vector3.right * player.moveDirection * player.moveSpeed * deltaTime;
+        player.transform.Translate(move, Space.Self);
+    }
+    protected override void OnExit() { }
+}
+
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 4.0f;
-    public float MoveSpeed => moveSpeed;
+    [SerializeField] public float moveSpeed = 4.0f;
+    [SerializeField] public float rotationSpeed = 180.0f;
 
-    [SerializeField] private float rotateSpeed = 360f; // градусов в секунду
-    public float RotateSpeed => rotateSpeed;
-
-    public bool IsRotating { get; set; }
-    public float TargetAngleY { get; set; }
-
+    //здесь будем "запоминать" текущий барьер
     private IMovementBarrier currentBarrier;
 
-    public int MoveDirection { get; set; }
+    public StateMachine statemachine;
+    public Idle idle;
+    public FacingPassengers facingpassengers;
+    public Moving moving;
+    public Ignor ignor;
 
-    private StateMachine stateMachine;
-
-    public IdleState Idle { get; private set; }
-    public MovingState Moving { get; private set; }
-    public FacingPassengersState FacingPassengers { get; private set; }
-    public RotatingState Rotating { get; private set; }
+    public int moveDirection = 0; // +1 вперёд по локальной оси X, -1 назад по X
 
     private void Awake()
     {
-        stateMachine = new StateMachine();
-
-        Idle = new IdleState(this, stateMachine);
-        Moving = new MovingState(this, stateMachine);
-        FacingPassengers = new FacingPassengersState(this, stateMachine);
-        Rotating = new RotatingState(this, stateMachine);
-
-        stateMachine.ChangeState(Idle);
+        idle = new Idle(this);
+        ignor = new Ignor();
+        facingpassengers = new FacingPassengers(this);
+        moving = new Moving(this);
+        statemachine = new StateMachine();
+        statemachine.ChangeState(idle);
     }
 
     private void Update()
     {
-        stateMachine.Update(Time.deltaTime);
+        //В состоянии бездействия мы читаем инпуты, в состоянии ходьбы мы игнорируем их и движемся пока не дойдем до барьера
+        statemachine.Update(Time.deltaTime);
     }
-
     public bool CanMoveInDirection(int direction)
     {
         if (currentBarrier == null)
-            return true;
+            return true; // барьеров нет, можно куда угодно
 
+        // Локальное направление движения (по взгляду, по локальному X)
         Vector3 localMoveDir = Vector3.right * direction;
+        // Преобразуем его в мировые координаты
         Vector3 worldMoveDir = transform.TransformDirection(localMoveDir);
 
+        // Смотрим, куда это по мировой оси X (коридор)
         float dot = Vector3.Dot(worldMoveDir, Vector3.right);
 
         if (dot > 0f)
@@ -54,17 +157,21 @@ public class Player : MonoBehaviour
         if (dot < 0f)
             return currentBarrier.CanMoveBackward;
 
+        // Если вдруг движение строго поперёк коридора — блокируем
         return false;
     }
 
+    //Время потрогать траву (барьер)
     private void OnTriggerEnter(Collider other)
     {
         IMovementBarrier barrier = other.GetComponent<IMovementBarrier>();
         if (barrier != null)
         {
             currentBarrier = barrier;
-            MoveDirection = 0;
-            stateMachine.ChangeState(Idle);
+
+            // Всегда просто останавливаемся, не меняя координаты
+            statemachine.ChangeState(idle);
+            moveDirection = 0;
         }
     }
 
@@ -77,197 +184,44 @@ public class Player : MonoBehaviour
         }
     }
 
-    // RotateY теперь принимает обычное State (без TState)
-    public void RotateY(float delta, State afterState)
+    //Вертел я этого игрока на оси Y
+    public void RotateY(float delta, State goalstate)
     {
-        if (IsRotating)
-            return;
-
-        IsRotating = true;
-        float currentY = transform.eulerAngles.y;
-        TargetAngleY = currentY + delta;
-
-        stateMachine.ChangeState(Rotating);
-        Rotating.SetFinalState(afterState);
+        statemachine.ChangeState(ignor);
+        StartCoroutine(RotateYSmooth(delta, goalstate));
     }
 
-    public abstract class PlayerState<TState> : State<TState> where TState : PlayerState<TState>
+    private IEnumerator RotateYSmooth(float delta, State goalstate)
     {
-        protected Player player;
-        protected StateMachine stateMachine;
+        Vector3 startEuler = transform.eulerAngles;
+        float startRotation = startEuler.y;
+        float targetRotation = startRotation + delta;
 
-        protected PlayerState(Player player, StateMachine stateMachine)
+        // Нормализуем угол
+        while (targetRotation >= 360f) targetRotation -= 360f;
+        while (targetRotation < 0f) targetRotation += 360f;
+
+        float diff = targetRotation - startRotation;
+
+        // Нормализуем разницу в [-180, 180] для кратчайшего пути
+        while (diff > 180f) diff -= 360f;
+        while (diff < -180f) diff += 360f;
+
+        float timeElapsed = 0f;
+        float duration = Mathf.Abs(diff) / rotationSpeed; // Время поворота в секундах
+
+        while (timeElapsed < duration)
         {
-            this.player = player;
-            this.stateMachine = stateMachine;
+            timeElapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(timeElapsed / duration);
+
+            float currentRotation = Mathf.Lerp(0f, diff, t);
+            transform.eulerAngles = new Vector3(startEuler.x, startRotation + currentRotation, startEuler.z);
+
+            yield return null;
         }
 
-        protected void UpdateRotation(float deltaTime)
-        {
-            if (!player.IsRotating)
-                return;
-
-            float currentY = player.transform.eulerAngles.y;
-            float newY = Mathf.MoveTowardsAngle(
-                currentY,
-                player.TargetAngleY,
-                player.RotateSpeed * deltaTime
-            );
-
-            Vector3 euler = player.transform.eulerAngles;
-            euler.y = newY;
-            player.transform.eulerAngles = euler;
-
-            if (Mathf.Approximately(Mathf.DeltaAngle(newY, player.TargetAngleY), 0f))
-            {
-                player.IsRotating = false;
-            }
-        }
-    }
-
-    public class IdleState : PlayerState<IdleState>
-    {
-        public IdleState(Player player, StateMachine stateMachine)
-            : base(player, stateMachine) { }
-
-        protected override void OnEnter()
-        {
-            player.MoveDirection = 0;
-        }
-
-        protected override void OnUpdate(float deltaTime)
-        {
-            // во время поворота — только поворот, ввод игнорируем
-            if (player.IsRotating)
-            {
-                UpdateRotation(deltaTime);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                player.RotateY(-90f, player.FacingPassengers);
-                return;
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                player.RotateY(+90f, player.FacingPassengers);
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                if (player.CanMoveInDirection(+1))
-                {
-                    player.MoveDirection = +1;
-                    stateMachine.ChangeState(player.Moving);
-                }
-            }
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                if (player.CanMoveInDirection(-1))
-                {
-                    player.MoveDirection = -1;
-                    stateMachine.ChangeState(player.Moving);
-                }
-            }
-        }
-
-        protected override void OnExit()
-        {
-        }
-    }
-
-    public class MovingState : PlayerState<MovingState>
-    {
-        public MovingState(Player player, StateMachine stateMachine)
-            : base(player, stateMachine) { }
-
-        protected override void OnEnter()
-        {
-        }
-
-        protected override void OnUpdate(float deltaTime)
-        {
-            UpdateRotation(deltaTime);
-
-            if (!player.CanMoveInDirection(player.MoveDirection))
-            {
-                player.MoveDirection = 0;
-                stateMachine.ChangeState(player.Idle);
-                return;
-            }
-
-            Vector3 move = Vector3.right * player.MoveDirection * player.MoveSpeed * deltaTime;
-            player.transform.Translate(move, Space.Self);
-        }
-
-        protected override void OnExit()
-        {
-        }
-    }
-
-    public class FacingPassengersState : PlayerState<FacingPassengersState>
-    {
-        public FacingPassengersState(Player player, StateMachine stateMachine)
-            : base(player, stateMachine) { }
-
-        protected override void OnEnter()
-        {
-        }
-
-        protected override void OnUpdate(float deltaTime)
-        {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                player.RotateY(-90f, player.Idle);
-                return;
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                player.RotateY(+90f, player.Idle);
-                return;
-            }
-        }
-
-        protected override void OnExit()
-        {
-        }
-    }
-
-    public class RotatingState : PlayerState<RotatingState>
-    {
-        private State finalState; // State (базовый класс), не generic
-
-        public RotatingState(Player player, StateMachine stateMachine)
-            : base(player, stateMachine) { }
-
-        // метод без TState
-        public void SetFinalState(State state)
-        {
-            finalState = state;
-        }
-
-        protected override void OnEnter()
-        {
-        }
-
-        protected override void OnUpdate(float deltaTime)
-        {
-            UpdateRotation(deltaTime);
-
-            if (!player.IsRotating)
-            {
-                if (finalState != null)
-                    stateMachine.ChangeState(finalState);
-                else
-                    stateMachine.ChangeState(player.Idle);
-            }
-        }
-
-        protected override void OnExit()
-        {
-            finalState = null;
-        }
+        transform.eulerAngles = new Vector3(startEuler.x, targetRotation, startEuler.z);
+        statemachine.ChangeState(goalstate);
     }
 }

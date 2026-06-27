@@ -246,8 +246,8 @@ MonoBehaviour:
     y: 0
     width: 104.5
     height: 417.5
-  m_MinSize: {x: 50, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 52, y: 76}
+  m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -1143,9 +1143,9 @@ MonoBehaviour:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs:
-      - m_Data: -1456
+      - m_Data: 46326
       m_LastClickedID:
-        m_Data: -1456
+        m_Data: 0
       m_ExpandedIDs:
       - m_Data: -1306
       m_RenameOverlay:
@@ -1269,7 +1269,7 @@ MonoBehaviour:
       height: 540
     m_MinimalGUI: 1
   m_defaultScale: 0.6861111
-  m_LastWindowPixelSize: {x: 1564, y: 783}
+  m_LastWindowPixelSize: {x: 782, y: 391.5}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -1416,7 +1416,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/0_Source/Scripts
+    - Assets
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1426,22 +1426,21 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/0_Source/Scripts
+  - Assets
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\marka\HareCatch
   m_LockTracker:
     m_IsLocked: 0
   m_LastLocalAssetsSearchArea: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 35.999634}
+    scrollPos: {x: 0, y: 1.5}
     m_SelectedIDs:
-    - m_Data: 48112
+    - m_Data: 47960
     m_LastClickedID:
-      m_Data: 48112
+      m_Data: 47960
     m_ExpandedIDs:
     - m_Data: 0
     - m_Data: 47960
-    - m_Data: 48096
     - m_Data: 1000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1503,9 +1502,9 @@ MonoBehaviour:
       m_ResourceFile: 
   m_ListAreaState:
     m_SelectedInstanceIDs:
-    - m_Data: -1456
-    m_LastClickedInstanceID: -1456
-    m_HadKeyboardFocusLastEvent: 1
+    - m_Data: 46326
+    m_LastClickedInstanceID: 46326
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs:
     - m_Data: 47344
     m_RenameOverlay:

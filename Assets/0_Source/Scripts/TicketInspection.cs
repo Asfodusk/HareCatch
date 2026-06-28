@@ -105,6 +105,7 @@ public class TicketInspection : MonoBehaviour
         {
             if (game != null) game.ApplyReward(_data.ApproveMoney, _data.ApproveKarma);
             _data.MarkChecked(); // пассажир проверен — повторно проверить нельзя
+            if (game != null) game.RecordApproved(_data.Id); // запоминаем выбор для сохранения
         }
         finally { CloseInternal(false); }
     }
@@ -114,7 +115,11 @@ public class TicketInspection : MonoBehaviour
     {
         if (!_active || _data == null) return;
         _active = false; // защита от повторного клика по кнопке в тот же кадр
-        try { if (game != null) game.ApplyReward(_data.KickMoney, _data.KickKarma); }
+        try
+        {
+            if (game != null) game.ApplyReward(_data.KickMoney, _data.KickKarma);
+            if (game != null) game.RecordKicked(_data.Id); // запоминаем выбор для сохранения
+        }
         finally { CloseInternal(true); }
     }
 

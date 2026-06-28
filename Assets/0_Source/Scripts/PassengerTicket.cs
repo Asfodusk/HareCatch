@@ -25,11 +25,19 @@ public class PassengerTicket : MonoBehaviour
     [Tooltip("Сколько кармы получит игрок, если ВЫГОНИТ пассажира. Может быть отрицательной.")]
     [SerializeField] private int kickKarma = -10;
 
+    [Header("Сохранение")]
+    [Tooltip("Необязательный уникальный ID для сохранения выборов игрока. Пусто = имя объекта НПС. " +
+             "Заполни вручную, только если в сцене есть НПС с одинаковыми именами.")]
+    [SerializeField] private string saveId;
+
     public Sprite Ticket => ticket;
     public int ApproveMoney => approveMoney;
     public int ApproveKarma => approveKarma;
     public int KickMoney => kickMoney;
     public int KickKarma => kickKarma;
+
+    // ID для сохранения выборов игрока: заданный saveId или имя объекта НПС.
+    public string Id => string.IsNullOrEmpty(saveId) ? gameObject.name : saveId;
 
     // Runtime-флаг: проверяли ли уже этого пассажира в текущей сессии.
     // Не сериализуется, сбрасывается при перезагрузке сцены. Ставится при «Одобрить».

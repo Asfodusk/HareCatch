@@ -43,6 +43,12 @@ public class Game : MonoBehaviour
         Load();
     }
 
+    void Start()
+    {
+        // После Load() и после Awake() всех НПС применяем сохранённые выборы к сцене.
+        ApplySavedNpcStates();
+    }
+
     void Update()
     {
         // Накапливаем прошедшее реальное время, пока смена не закончилась
@@ -86,6 +92,43 @@ public class Game : MonoBehaviour
     public void ShowMoney(bool visible)
     {
         if (moneyText) moneyText.gameObject.SetActive(visible);
+    }
+
+    // Запоминает выбор игрока для сохранения.
+    public void RecordApproved(string npcId)
+    {
+        if (string.IsNullOrEmpty(npcId)) return;
+        if (!gameData.approvedNpcs.Contains(npcId))
+            gameData.approvedNpcs.Add(npcId);
+    }
+
+    public void RecordKicked(string npcId)
+    {
+        if (string.IsNullOrEmpty(npcId)) return;
+        if (!gameData.kickedNpcs.Contains(npcId))
+            gameData.kickedNpcs.Add(npcId);
+    }
+
+    // Применяет сохранённые выборы к сцене: выгнанных НПС удаляет сразу, одобренных
+    // помечает проверенными (чтобы их нельзя было проверить/выгнать повторно).
+    private void ApplySavedNpcStates()
+    {
+        var npcs = FindObjectsByType<PassengerTicket>(
+            FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        foreach (var npc in npcs)
+        {
+            string id = npc.Id;
+            if (gameData.kickedNpcs.Contains(id))
+            {
+                npc.gameObject.SetActive(false); // мгновенно убираем из взаимодействия
+                Destroy(npc.gameObject);
+            }
+            else if (gameData.approvedNpcs.Contains(id))
+            {
+                npc.MarkChecked();
+            }
+        }
     }
 
     // Переводит currentTime (0..sessionDuration) в игровое время суток

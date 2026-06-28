@@ -7,6 +7,12 @@ public class PauseManager : MonoBehaviour
 
     private bool isPaused;
 
+    // Текущее состояние паузы (читают другие системы, напр. проверка билетов).
+    public bool IsPaused => isPaused;
+
+    // Срабатывает при каждом переключении паузы (true — пауза включена).
+    public event System.Action<bool> PauseChanged;
+
     void Update()
     {
         // Update вызывается даже при timeScale = 0, поэтому Escape ловится и на паузе
@@ -20,6 +26,7 @@ public class PauseManager : MonoBehaviour
         isPaused = !isPaused;
         Time.timeScale = isPaused ? 0f : 1f;
         if (pauseLabel) pauseLabel.SetActive(isPaused);
+        PauseChanged?.Invoke(isPaused);
     }
 
     // Подстраховка: если объект выключат/уничтожат во время паузы (например, при выходе

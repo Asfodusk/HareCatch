@@ -1,4 +1,4 @@
-﻿title: FirstD
+title: FirstD
 ---
 
 <<declare $speaker_name = "" >>
@@ -29,4 +29,8 @@
 <<else>>
     {$speaker_name}: Ну, удачи тебе в твоих делах.
 <<endif>>
+
+-> Предъявите ваш билет.
+    <<check_ticket>>
+-> Счастливого пути.
 ===

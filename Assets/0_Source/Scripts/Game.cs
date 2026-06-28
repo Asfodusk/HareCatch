@@ -71,6 +71,23 @@ public class Game : MonoBehaviour
         }
     }
 
+    // ===== Публичный API для геймплея (проверка билетов и т.п.) =====
+
+    // Начислить деньги и карму. Значения могут быть отрицательными (штраф).
+    // HUD денег обновится автоматически в UpdateUI, когда деньги снова видимы.
+    public void ApplyReward(int money, int karma)
+    {
+        gameData.wallet += money;
+        gameData.karma += karma;
+    }
+
+    // Показать/спрятать деньги в HUD. Таймер не трогаем — он остаётся видимым.
+    // Используется во время проверки билетов.
+    public void ShowMoney(bool visible)
+    {
+        if (moneyText) moneyText.gameObject.SetActive(visible);
+    }
+
     // Переводит currentTime (0..sessionDuration) в игровое время суток
     private void GetClock(out int hours, out int minutes)
     {

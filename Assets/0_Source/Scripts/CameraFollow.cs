@@ -10,7 +10,6 @@ public class CameraFollow : MonoBehaviour
     private float _currentFaceHeight;
     private float _currentDistance;
     
-    // Публичные свойства
     public Transform Target 
     { 
         get => _target;
@@ -47,6 +46,21 @@ public class CameraFollow : MonoBehaviour
         {
             _currentFaceHeight = -0.04f;
             _currentDistance = 0.22f;
+        }
+        else if (_target.name == "Mary")
+        {
+            _currentFaceHeight = 0.55f;
+            _currentDistance = 0.03f;
+        }
+        else if (_target.name == "Aria")
+        {
+            _currentFaceHeight = 0.55f;
+            _currentDistance = 1.53f;
+        }
+        else if (_target.name == "Alya" || _target.name == "Dora" || _target.name == "PavelP")
+        {
+            _currentFaceHeight = 0.47f;
+            _currentDistance = 1.67f;
         }
         else
         {

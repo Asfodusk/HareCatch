@@ -3,29 +3,57 @@ title: FirstD
 
 <<declare $speaker_name = "" >>
 
-<<set $rand = random_range(1, 3)>>
+<<set $rand = random_range(1, 6)>>
 <<if $rand == 1>>
-    {$speaker_name}: Здорово, приятель!
+    {$speaker_name}: Здравствуйте... Сил больше нет.
 <<elseif $rand == 2>>
-    {$speaker_name}: Кто идет! А, это ты.
+    {$speaker_name}: Здравствуйте. Вот мой билет.
+<<elseif $rand == 3>>
+    {$speaker_name}: Добрый день. Тошнит не могу...
+<<elseif $rand == 4>>
+    {$speaker_name}: Здравствуйте. Проверяйте меня быстрее.
+<<elseif $rand == 5>>
+    {$speaker_name}: Мы тут заживо гнием!
 <<else>>
     {$speaker_name}: Хм? А, привет-привет.
 <<endif>>
 
-<<set $rand = random_range(1, 3)>>
+<<set $rand = random_range(1, 12)>>
 <<if $rand == 1>>
-    {$speaker_name}: Моё колено до сих пор болит после той стрелы...
+    {$speaker_name}: Мой билет действителен, проверяйте скорее.
 <<elseif $rand == 2>>
-    {$speaker_name}: На окраине города опять видели бандитов.
+    {$speaker_name}: Смотрите, все документы чистые, никаких нарушений нет.
+<<elseif $rand == 3>>
+    {$speaker_name}: Нам врут, уровень радиации в сотни раз выше, чем говорят в новостях!
+<<elseif $rand == 4>>
+    {$speaker_name}: Вода в кране стала серой, ее вообще нельзя пить.
+<<elseif $rand == 5>>
+    {$speaker_name}: Мой билет действителен, проверяйте скорее.
+<<elseif $rand == 6>>
+    {$speaker_name}: Не оставляйте меня здесь, этот город обречен.
+<<elseif $rand == 7>>
+    {$speaker_name}: Извините, мне очень плохо, тошнит с самого утра.
+<<elseif $rand == 8>>
+    {$speaker_name}: Кожа горит так, будто я весь день на солнце, хотя неба из-за дыма не видно.
+<<elseif $rand == 9>>
+    {$speaker_name}: Мародеры уже грабят аптеки в центре, там полный хаос.
+<<elseif $rand == 10>>
+    {$speaker_name}: Вы слышали этот гул со стороны станции час назад?
+<<elseif $rand == 11>>
+    {$speaker_name}: Почему проверка занимает так много времени? Быстрее!
 <<else>>
-    {$speaker_name}: Скоро уши отвалятся.
+    {$speaker_name}: Голова раскалывается, и этот металлический привкус во рту никак не проходит...
 <<endif>>
 
-<<set $rand = random_range(1, 3)>>
+<<set $rand = random_range(1, 5)>>
 <<if $rand == 1>>
-    {$speaker_name}: Не нарушай закон.
+    {$speaker_name}: Прощай, проклятое место.
 <<elseif $rand == 2>>
-    {$speaker_name}: Бывай.
+    {$speaker_name}: Господи, неужели я наконец-то вырвусь из этого ада.
+<<elseif $rand == 3>>
+    {$speaker_name}: Главное — уехать подальше.
+<<elseif $rand == 4>>
+    {$speaker_name}: Всего хорошего.
 <<else>>
     {$speaker_name}: Ну, удачи тебе в твоих делах.
 <<endif>>

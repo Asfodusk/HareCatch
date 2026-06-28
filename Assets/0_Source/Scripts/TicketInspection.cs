@@ -36,7 +36,7 @@ public class TicketInspection : MonoBehaviour
 
     private Transform _npc;
     private PassengerTicket _data;
-    private System.Action _onClosed;
+    private System.Action<bool> _onClosed;
     private bool _active;
 
     public bool IsActive => _active;
@@ -61,8 +61,8 @@ public class TicketInspection : MonoBehaviour
     }
 
     // Открыть проверку для конкретного НПС.
-    // onClosed вызывается после решения игрока — им MouseClickRaycast возвращает камеру/игрока.
-    public void Begin(Transform npc, System.Action onClosed)
+    // onClosed(bool kicked) вызывается после решения игрока: kicked = true, если выгнали.
+    public void Begin(Transform npc, System.Action<bool> onClosed)
     {
         _npc = npc;
         _onClosed = onClosed;
@@ -72,6 +72,13 @@ public class TicketInspection : MonoBehaviour
         {
             Debug.LogWarning($"[TicketInspection] На «{(npc ? npc.name : "null")}» нет компонента " +
                              "PassengerTicket — проверка пропущена.");
+            CloseInternal(false);
+            return;
+        }
+
+        if (panelRoot == null)
+        {
+            Debug.LogError("[TicketInspection] Не назначен panelRoot — открыть панель проверки нельзя.", this);
             CloseInternal(false);
             return;
         }
@@ -92,8 +99,14 @@ public class TicketInspection : MonoBehaviour
     {
         if (!_active || _data == null) return;
         _active = false; // защита от повторного клика по кнопке в тот же кадр
-        if (game != null) game.ApplyReward(_data.ApproveMoney, _data.ApproveKarma);
-        CloseInternal(false);
+        // finally гарантирует, что панель закроется и Task диалога завершится,
+        // даже если начисление награды бросит исключение (иначе — зависший диалог).
+        try
+        {
+            if (game != null) game.ApplyReward(_data.ApproveMoney, _data.ApproveKarma);
+            _data.MarkChecked(); // пассажир проверен — повторно проверить нельзя
+        }
+        finally { CloseInternal(false); }
     }
 
     // Решение «Выгнать»: начисляем награду за высадку и удаляем пассажира из сцены.
@@ -101,8 +114,8 @@ public class TicketInspection : MonoBehaviour
     {
         if (!_active || _data == null) return;
         _active = false; // защита от повторного клика по кнопке в тот же кадр
-        if (game != null) game.ApplyReward(_data.KickMoney, _data.KickKarma);
-        CloseInternal(true);
+        try { if (game != null) game.ApplyReward(_data.KickMoney, _data.KickKarma); }
+        finally { CloseInternal(true); }
     }
 
     private void CloseInternal(bool removeNpc)
@@ -117,7 +130,8 @@ public class TicketInspection : MonoBehaviour
         _onClosed = null;
         _npc = null;
         _data = null;
-        cb?.Invoke();
+        try { cb?.Invoke(removeNpc); }
+        catch (System.Exception e) { Debug.LogError("[TicketInspection] Ошибка в колбэке закрытия: " + e, this); }
     }
 
     private void OnPauseChanged(bool paused)

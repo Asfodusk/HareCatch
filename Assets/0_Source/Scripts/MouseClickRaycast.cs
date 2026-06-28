@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -14,8 +16,8 @@ public class MouseClickRaycast : MonoBehaviour
 
     // НПС, по которому сейчас идёт взаимодействие (нужен для проверки билета).
     private Transform _currentNpc;
-    // true, пока открыта панель проверки билетов — откладывает возврат камеры.
-    private bool _inspectionActive = false;
+    // Ожидание решения игрока в панели проверки билетов.
+    private TaskCompletionSource<bool> _ticketDecision;
 
     private Vector3 _savedPosition;
     private Quaternion _savedRotation;
@@ -46,9 +48,10 @@ public class MouseClickRaycast : MonoBehaviour
                 _variableStorage = FindFirstObjectByType<InMemoryVariableStorage>();
             }
 
-            // Команда <<check_ticket>> вызывается диалоговой опцией «Проверить билет»
-            // (см. Assets/0_Source/Dialogue/FirstD.yarn).
-            _dialogueRunner.AddCommandHandler("check_ticket", (System.Action)BeginTicketCheck);
+            // Команда <<check_ticket>> асинхронная: открывает панель проверки и ЖДЁТ
+            // решения игрока. Благодаря этому прощальная реплика в диалоге проигрывается
+            // уже ПОСЛЕ закрытия панели (см. Assets/0_Source/Dialogue/FirstD.yarn).
+            _dialogueRunner.AddCommandHandler("check_ticket", (Func<Task>)CheckTicketCommand);
         }
 
         if (_ticketInspection == null)
@@ -109,42 +112,56 @@ public class MouseClickRaycast : MonoBehaviour
         if (_variableStorage != null)
         {
             _variableStorage.SetValue("$speaker_name", targetObjectName);
+
+            // Уже проверенным пассажирам не показываем опцию проверки билета.
+            PassengerTicket pt = _currentNpc != null ? _currentNpc.GetComponent<PassengerTicket>() : null;
+            _variableStorage.SetValue("$checked", pt != null && pt.IsChecked);
         }
 
         _dialogueRunner.StartDialogue(_dialogueNodeName);
         _dialogueStarted = true;
 
-        // Блокируем управление игроком на время диалога (и последующей проверки билета).
+        // Блокируем управление игроком на время диалога (включая проверку билета).
         if (_player != null)
             _player.statemachine.ChangeState(_player.ignor);
     }
 
+    // Yarn-команда <<check_ticket>>: открывает панель проверки и возвращает Task,
+    // который завершается, когда игрок нажмёт «Одобрить» или «Выгнать». Пока Task не
+    // завершён, диалог стоит на месте. Выставляет $kicked для ветвления диалога.
+    private Task CheckTicketCommand()
+    {
+        if (_ticketInspection == null || _currentNpc == null)
+            return Task.CompletedTask;
+
+        // Обычный TaskCompletionSource: TrySetResult зовётся из обработчика кнопки на
+        // главном потоке, поэтому продолжение диалога тоже идёт на главном потоке (безопасно
+        // для Unity). cb вызывается последним в CloseInternal — реентрантность безвредна.
+        _ticketDecision = new TaskCompletionSource<bool>();
+        _ticketInspection.Begin(_currentNpc, kicked =>
+        {
+            try
+            {
+                if (_variableStorage != null)
+                    _variableStorage.SetValue("$kicked", kicked);
+            }
+            finally
+            {
+                // Гарантируем завершение Task в любом случае — иначе диалог зависнет,
+                // а игрок останется заблокированным (Ignor).
+                _ticketDecision.TrySetResult(kicked);
+            }
+        });
+        return _ticketDecision.Task;
+    }
+
     private void OnDialogueComplete()
     {
-        // Если игрок выбрал «Проверить билет», диалог завершается, но возврат
-        // камеры/игрока откладываем до закрытия панели проверки (FinishTicketCheck).
-        if (_inspectionActive) return;
-
         Debug.Log("Диалог завершен. Возвращаем камеру.");
         RestoreAfterInteraction();
     }
 
-    // Вызывается Yarn-командой <<check_ticket>> из диалоговой опции «Проверить билет».
-    private void BeginTicketCheck()
-    {
-        if (_ticketInspection == null || _currentNpc == null) return;
-        _inspectionActive = true;
-        _ticketInspection.Begin(_currentNpc, FinishTicketCheck);
-    }
-
-    // Вызывается панелью проверки после решения игрока (Одобрить/Выгнать).
-    private void FinishTicketCheck()
-    {
-        _inspectionActive = false;
-        RestoreAfterInteraction();
-    }
-
-    // Возврат камеры на игрока, восстановление позиции игрока и разблокировка кликов.
+    // Возврат камеры на игрока, восстановление позиции игрока и разблокировка управления.
     private void RestoreAfterInteraction()
     {
         if (_cameraFollow != null)

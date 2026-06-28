@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TicketInspection
   panelRoot: {fileID: 1089358992}
-  sampleTicket: {fileID: 21300000, guid: 6e69e4758de0be14ab0855240e4542d2, type: 3}
+  sampleTicket: {fileID: 21300000, guid: 0d9d73a6e154b34458a4c3e0ed05882e, type: 3}
   sampleTicketImage: {fileID: 1294232335}
   passengerTicketImage: {fileID: 1133769787}
   approveButton: {fileID: 932770430}
@@ -520,7 +520,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: 3ff36a93d15232c48888137674c28ddc, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!1 &341357408
 GameObject:
@@ -708,9 +708,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: [{targetCorrespondingSourceObject: {fileID: 4913710294896532468, guid: 50036142b5d6e764cb85a58671e02313, type: 3}, insertIndex: -1, addedObject: {fileID: 1278548423}},
-      {targetCorrespondingSourceObject: {fileID: 4913710294896532468, guid: 50036142b5d6e764cb85a58671e02313, type: 3}, insertIndex: -1, addedObject: {fileID: 1278548423}},
-      {targetCorrespondingSourceObject: {fileID: 4913710294896532468, guid: 50036142b5d6e764cb85a58671e02313, type: 3}, insertIndex: -1, addedObject: {fileID: 1278548426}}]
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4913710294896532468, guid: 50036142b5d6e764cb85a58671e02313, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1278548423}
+    - targetCorrespondingSourceObject: {fileID: 4913710294896532468, guid: 50036142b5d6e764cb85a58671e02313, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1278548426}
   m_SourcePrefab: {fileID: 100100000, guid: 50036142b5d6e764cb85a58671e02313, type: 3}
 --- !u!4 &359609650 stripped
 Transform:
@@ -1205,7 +1209,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: 8b2bc11ba1115c74e952231d74af494d, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!1001 &483995301
 PrefabInstance:
@@ -1266,9 +1270,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: [{targetCorrespondingSourceObject: {fileID: 2533871552493415187, guid: e7429a5613ca35a4f903d2de50f3853e, type: 3}, insertIndex: -1, addedObject: {fileID: 313223321}},
-      {targetCorrespondingSourceObject: {fileID: 2533871552493415187, guid: e7429a5613ca35a4f903d2de50f3853e, type: 3}, insertIndex: -1, addedObject: {fileID: 313223321}},
-      {targetCorrespondingSourceObject: {fileID: 2533871552493415187, guid: e7429a5613ca35a4f903d2de50f3853e, type: 3}, insertIndex: -1, addedObject: {fileID: 313223325}}]
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2533871552493415187, guid: e7429a5613ca35a4f903d2de50f3853e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 313223321}
+    - targetCorrespondingSourceObject: {fileID: 2533871552493415187, guid: e7429a5613ca35a4f903d2de50f3853e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 313223325}
   m_SourcePrefab: {fileID: 100100000, guid: e7429a5613ca35a4f903d2de50f3853e, type: 3}
 --- !u!4 &493290663 stripped
 Transform:
@@ -1428,9 +1436,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: [{targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cfa324a775c9dec4c8c4c7659021cc15, type: 3}, insertIndex: -1, addedObject: {fileID: 1912125332}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cfa324a775c9dec4c8c4c7659021cc15, type: 3}, insertIndex: -1, addedObject: {fileID: 1912125332}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cfa324a775c9dec4c8c4c7659021cc15, type: 3}, insertIndex: -1, addedObject: {fileID: 1912125335}}]
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cfa324a775c9dec4c8c4c7659021cc15, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1912125332}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cfa324a775c9dec4c8c4c7659021cc15, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1912125335}
   m_SourcePrefab: {fileID: 100100000, guid: cfa324a775c9dec4c8c4c7659021cc15, type: 3}
 --- !u!4 &679990555 stripped
 Transform:
@@ -1508,7 +1520,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: e5d1605ebee1f344f8708bc8df7eb32c, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!4 &768904358 stripped
 Transform:
@@ -1634,9 +1646,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: [{targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: beae123a08c0d0a44b945619ac2e5e28, type: 3}, insertIndex: -1, addedObject: {fileID: 1753209491}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: beae123a08c0d0a44b945619ac2e5e28, type: 3}, insertIndex: -1, addedObject: {fileID: 1753209491}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: beae123a08c0d0a44b945619ac2e5e28, type: 3}, insertIndex: -1, addedObject: {fileID: 1753209494}}]
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: beae123a08c0d0a44b945619ac2e5e28, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1753209491}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: beae123a08c0d0a44b945619ac2e5e28, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1753209494}
   m_SourcePrefab: {fileID: 100100000, guid: beae123a08c0d0a44b945619ac2e5e28, type: 3}
 --- !u!1001 &913991998
 PrefabInstance:
@@ -3246,7 +3262,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: cfe71a31442830642a4ae95fcd72b41a, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!4 &1198789265 stripped
 Transform:
@@ -3301,10 +3317,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f3643f610f4db4b9d19fa347842099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PassengerTicket
-  ticket: {fileID: 21300000, guid: f95126c7d5f708b4d88b36c3dbe5d3ed, type: 3}
+  ticket: {fileID: 21300000, guid: 139faca706204934facc9b4a896a47de, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!1 &1294232333
 GameObject:
@@ -3449,9 +3465,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: [{targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f005d411aefd2394d8d4e5c71e2992cf, type: 3}, insertIndex: -1, addedObject: {fileID: 1728243869}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f005d411aefd2394d8d4e5c71e2992cf, type: 3}, insertIndex: -1, addedObject: {fileID: 1728243869}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f005d411aefd2394d8d4e5c71e2992cf, type: 3}, insertIndex: -1, addedObject: {fileID: 1728243872}}]
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f005d411aefd2394d8d4e5c71e2992cf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1728243869}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f005d411aefd2394d8d4e5c71e2992cf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1728243872}
   m_SourcePrefab: {fileID: 100100000, guid: f005d411aefd2394d8d4e5c71e2992cf, type: 3}
 --- !u!4 &1331462956 stripped
 Transform:
@@ -3554,7 +3574,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: 9477f80a89ce8374da4979d4aad4a0c1, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!4 &1565432578 stripped
 Transform:
@@ -3766,7 +3786,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: 6424b25b7b300ca45bab1c11a412b062, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!1001 &1615493988
 PrefabInstance:
@@ -4378,7 +4398,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: a0a9242dc1fba44439c54affcf41a0bf, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!4 &1731775715 stripped
 Transform:
@@ -4426,7 +4446,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: 2ba88e9b0a06f1847b8cac24078098a2, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!4 &1805274313 stripped
 Transform:
@@ -4505,9 +4525,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: [{targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e8c74be01f8b1984dab9374cc633f3a7, type: 3}, insertIndex: -1, addedObject: {fileID: 1553303309}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e8c74be01f8b1984dab9374cc633f3a7, type: 3}, insertIndex: -1, addedObject: {fileID: 1553303309}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e8c74be01f8b1984dab9374cc633f3a7, type: 3}, insertIndex: -1, addedObject: {fileID: 1553303312}}]
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e8c74be01f8b1984dab9374cc633f3a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1553303309}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e8c74be01f8b1984dab9374cc633f3a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1553303312}
   m_SourcePrefab: {fileID: 100100000, guid: e8c74be01f8b1984dab9374cc633f3a7, type: 3}
 --- !u!4 &1835010638 stripped
 Transform:
@@ -4582,9 +4606,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: [{targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd773772d48f2e141acc6d524c6c1069, type: 3}, insertIndex: -1, addedObject: {fileID: 755896517}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd773772d48f2e141acc6d524c6c1069, type: 3}, insertIndex: -1, addedObject: {fileID: 755896517}},
-      {targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd773772d48f2e141acc6d524c6c1069, type: 3}, insertIndex: -1, addedObject: {fileID: 755896520}}]
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd773772d48f2e141acc6d524c6c1069, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 755896517}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd773772d48f2e141acc6d524c6c1069, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 755896520}
   m_SourcePrefab: {fileID: 100100000, guid: bd773772d48f2e141acc6d524c6c1069, type: 3}
 --- !u!4 &1869730745 stripped
 Transform:
@@ -4647,7 +4675,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: 43389e2ddf0bf8b4ca6ef3fd27290149, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!4 &1927824799 stripped
 Transform:
@@ -4852,7 +4880,7 @@ MonoBehaviour:
   ticket: {fileID: 21300000, guid: 543f614419b2c0c4497df0716192b0a9, type: 3}
   approveMoney: 10
   approveKarma: 0
-  kickMoney: 0
+  kickMoney: 20
   kickKarma: 10
 --- !u!4 &2010674200 stripped
 Transform:
@@ -5304,7 +5332,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7473105249334359904, guid: 476ee9ce357c4e24f80f05fc0029b5ac, type: 3}
-      propertyPath: m_Cameras.Array.data[0]
+      propertyPath: 'm_Cameras.Array.data[0]'
       value: 
       objectReference: {fileID: 1109255196}
     m_RemovedComponents: []

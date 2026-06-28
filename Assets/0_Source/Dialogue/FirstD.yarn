@@ -2,6 +2,9 @@ title: FirstD
 ---
 
 <<declare $speaker_name = "" >>
+<<declare $kicked = false>>
+<<declare $checked = false>>
+<<set $kicked = false>>
 
 <<set $rand = random_range(1, 6)>>
 <<if $rand == 1>>
@@ -45,20 +48,34 @@ title: FirstD
     {$speaker_name}: Голова раскалывается, и этот металлический привкус во рту никак не проходит...
 <<endif>>
 
-<<set $rand = random_range(1, 5)>>
-<<if $rand == 1>>
-    {$speaker_name}: Прощай, проклятое место.
-<<elseif $rand == 2>>
-    {$speaker_name}: Господи, неужели я наконец-то вырвусь из этого ада.
-<<elseif $rand == 3>>
-    {$speaker_name}: Главное — уехать подальше.
-<<elseif $rand == 4>>
-    {$speaker_name}: Всего хорошего.
+<<if $checked == false>>
+    -> Предъявите ваш билет.
+        <<check_ticket>>
+        <<jump Farewell>>
+    -> Счастливого пути.
+        <<jump Farewell>>
 <<else>>
-    {$speaker_name}: Ну, удачи тебе в твоих делах.
+    -> Счастливого пути.
+        <<jump Farewell>>
 <<endif>>
+===
 
--> Предъявите ваш билет.
-    <<check_ticket>>
--> Счастливого пути.
+title: Farewell
+---
+// Прощальная реплика играет, только если пассажира НЕ выгнали ($kicked == false).
+// При «Выгнать» пассажир уже удалён со сцены — прощаться некому.
+<<if $kicked == false>>
+    <<set $rand = random_range(1, 5)>>
+    <<if $rand == 1>>
+        {$speaker_name}: Прощай, проклятое место.
+    <<elseif $rand == 2>>
+        {$speaker_name}: Господи, неужели я наконец-то вырвусь из этого ада.
+    <<elseif $rand == 3>>
+        {$speaker_name}: Главное — уехать подальше.
+    <<elseif $rand == 4>>
+        {$speaker_name}: Всего хорошего.
+    <<else>>
+        {$speaker_name}: Ну, удачи тебе в твоих делах.
+    <<endif>>
+<<endif>>
 ===

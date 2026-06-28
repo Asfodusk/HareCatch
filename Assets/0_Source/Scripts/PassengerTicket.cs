@@ -30,4 +30,9 @@ public class PassengerTicket : MonoBehaviour
     public int ApproveKarma => approveKarma;
     public int KickMoney => kickMoney;
     public int KickKarma => kickKarma;
+
+    // Runtime-флаг: проверяли ли уже этого пассажира в текущей сессии.
+    // Не сериализуется, сбрасывается при перезагрузке сцены. Ставится при «Одобрить».
+    public bool IsChecked { get; private set; }
+    public void MarkChecked() => IsChecked = true;
 }

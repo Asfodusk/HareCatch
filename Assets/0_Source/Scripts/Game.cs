@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using TMPro;
 using UnityEngine;
@@ -22,6 +23,13 @@ public class Game : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Text moneyText;
     [SerializeField] private TMP_Text timerText;
+    [Tooltip("Сообщение «Сохранено» (TMP) в левом нижнем углу. Выключено по умолчанию.")]
+    [SerializeField] private TMP_Text saveMessageText;
+    [Tooltip("Сколько секунд показывать сообщение «Сохранено».")]
+    [SerializeField] private float saveMessageDuration = 2f;
+
+    [Tooltip("Контроллер проверки билетов — чтобы запретить сохранение во время проверки. Найдётся сам.")]
+    [SerializeField] private TicketInspection ticketInspection;
 
     // Доступ к данным игры из других скриптов
     public GameData Data => gameData;
@@ -34,8 +42,19 @@ public class Game : MonoBehaviour
     private int shownWallet = int.MinValue;
     private int shownHour = -1;
     private int shownMinute = -1;
+    private Coroutine _saveMessageRoutine;
 
-    private string SavePath => Path.Combine(Application.persistentDataPath, "gamedata.json");
+    // Путь к файлу сохранения — общий для Game, меню и концовок.
+    public static string SaveFilePath => Path.Combine(Application.persistentDataPath, "gamedata.json");
+    // Есть ли сохранение (для кнопки «Загрузить» в меню).
+    public static bool HasSave => File.Exists(SaveFilePath);
+    // Удалить файл сохранения (новая игра / переход к концовке).
+    public static void DeleteSaveFile()
+    {
+        if (File.Exists(SaveFilePath)) File.Delete(SaveFilePath);
+    }
+
+    private string SavePath => SaveFilePath;
 
     void Awake()
     {
@@ -47,6 +66,8 @@ public class Game : MonoBehaviour
     {
         // После Load() и после Awake() всех НПС применяем сохранённые выборы к сцене.
         ApplySavedNpcStates();
+
+        if (ticketInspection == null) ticketInspection = FindFirstObjectByType<TicketInspection>();
     }
 
     void Update()
@@ -54,6 +75,14 @@ public class Game : MonoBehaviour
         // Накапливаем прошедшее реальное время, пока смена не закончилась
         if (!IsWorkdayOver)
             gameData.currentTime = Mathf.Min(gameData.currentTime + Time.deltaTime, sessionDuration);
+
+        // Быстрое сохранение по Q + сообщение «Сохранено».
+        // Во время проверки билетов сохранять нельзя.
+        if (Input.GetKeyDown(KeyCode.Q) && !IsTicketCheckActive())
+        {
+            Save();
+            ShowSaveMessage();
+        }
 
         UpdateUI();
     }
@@ -155,6 +184,28 @@ public class Game : MonoBehaviour
         string json = gameData.ToJson();
         File.WriteAllText(SavePath, json);
         Debug.Log($"[Game] Сохранено в {SavePath}");
+    }
+
+    // Идёт ли сейчас проверка билетов (во время неё сохранение запрещено).
+    private bool IsTicketCheckActive()
+    {
+        return ticketInspection != null && ticketInspection.IsActive;
+    }
+
+    // Показывает сообщение «Сохранено» (TMP в углу экрана) на несколько секунд.
+    private void ShowSaveMessage()
+    {
+        if (saveMessageText == null) return;
+        if (_saveMessageRoutine != null) StopCoroutine(_saveMessageRoutine);
+        _saveMessageRoutine = StartCoroutine(SaveMessageRoutine());
+    }
+
+    private IEnumerator SaveMessageRoutine()
+    {
+        saveMessageText.text = "Сохранено";
+        saveMessageText.gameObject.SetActive(true);
+        yield return new WaitForSecondsRealtime(saveMessageDuration);
+        saveMessageText.gameObject.SetActive(false);
     }
 
     // Загрузка: если файл есть — читаем JSON и создаём из него GameData

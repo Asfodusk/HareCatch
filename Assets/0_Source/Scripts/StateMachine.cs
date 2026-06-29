@@ -20,11 +20,14 @@ public class StateMachine
 {
     private State currentState;
 
+    // Текущее состояние (для проверок снаружи, напр. можно ли кликать по НПС).
+    public State CurrentState => currentState;
+
     public void ChangeState(State state)
     {
         if (state == null)
             throw new System.ArgumentNullException(nameof(state),
-                "ChangeState ������� null: ��������� �� ������� � Awake().");
+                "ChangeState ������� null: ��������� �� ������� � Awake().");
 
         currentState?.Exit();
         currentState = state;

@@ -7,7 +7,22 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/0_Source/_Scenes/_Menu.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    guid: f2b293ef68cc4d8488b1e7362974d75e
+  - enabled: 1
+    path: Assets/0_Source/_Scenes/Prologue.unity
+    guid: 6b4bed3705e895a4987bef8135690199
+  - enabled: 1
+    path: Assets/0_Source/_Scenes/Walking demo scene.unity
+    guid: c76a07484dbad924ca0c5fe457b31610
+  - enabled: 1
+    path: Assets/0_Source/_Scenes/BadEnd.unity
+    guid: b568a43bb0d794a499bdce734ff28f8d
+  - enabled: 1
+    path: Assets/0_Source/_Scenes/NeutralEnd.unity
+    guid: 80810e12051c61b42bacc2ce9a82c507
+  - enabled: 1
+    path: Assets/0_Source/_Scenes/GoodEnd.unity
+    guid: 9558c6af4d37f2e4aa3ac90c37840663
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

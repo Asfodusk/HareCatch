@@ -1,21 +1,21 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // Загрузить сцену по имени (для кнопок меню и переходов).
+    // Имя сцены должно быть добавлено в File -> Build Settings.
+    public void LoadScene(string sceneName)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        SceneManager.LoadScene(sceneName);
     }
 
     public void ExitGame()
     {
         Application.Quit();
+#if UNITY_EDITOR
+        // В редакторе Application.Quit() ничего не делает — останавливаем Play для теста.
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 }

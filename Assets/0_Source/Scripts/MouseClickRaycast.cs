@@ -69,6 +69,11 @@ public class MouseClickRaycast : MonoBehaviour
     {
         if (_dialogueStarted) return;
 
+        // Кликать по НПС можно ТОЛЬКО когда игрок повёрнут к пассажирам (FacingPassengers).
+        // Иначе из Idle можно было начать диалог, а потом застрять: возврат всегда в
+        // FacingPassengers, но игрок не развёрнут — W/S заблокированы, а уйти из вагона можно.
+        if (_player != null && _player.statemachine.CurrentState != _player.facingpassengers) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             HandleMouseClick();

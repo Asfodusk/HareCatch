@@ -305,9 +305,9 @@ MonoBehaviour:
   - text: <align="center"><b>Hare Catch</b></align>
     voiceover: {fileID: 0}
     displayDuration: 4
-    pauseAfter: 3
+    pauseAfter: 0
     fontSize: 120
-  nextScene: 
+  nextScene: Walking demo scene
 --- !u!4 &487434266
 Transform:
   m_ObjectHideFlags: 0

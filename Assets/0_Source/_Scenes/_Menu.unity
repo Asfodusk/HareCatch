@@ -1995,6 +1995,7 @@ GameObject:
   m_Component:
   - component: {fileID: 666892497}
   - component: {fileID: 666892498}
+  - component: {fileID: 666892499}
   m_Layer: 0
   m_Name: SceneLoader
   m_TagString: Untagged
@@ -2029,6 +2030,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8b46edfb6c269740b12ed8c99a6e277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
+--- !u!114 &666892499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 666892496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea9747c9e2f35f740902a79a5b8588c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  prologueScene: Prologue
+  gameplayScene: Walking demo scene
+  loadButton: {fileID: 1086224848}
 --- !u!1 &685068360
 GameObject:
   m_ObjectHideFlags: 0
@@ -2451,8 +2467,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 666892498}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+      - m_Target: {fileID: 666892499}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
@@ -2737,6 +2753,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 666892499}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: LoadGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1086224849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2994,7 +3022,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1143273173}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 666892499}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: NewGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1143273173
 MonoBehaviour:
   m_ObjectHideFlags: 0

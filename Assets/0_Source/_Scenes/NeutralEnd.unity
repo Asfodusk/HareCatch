@@ -305,7 +305,7 @@ MonoBehaviour:
     displayDuration: 10
     pauseAfter: 2
     fontSize: 42
-  nextScene: 
+  nextScene: _Menu
 --- !u!4 &487434266
 Transform:
   m_ObjectHideFlags: 0

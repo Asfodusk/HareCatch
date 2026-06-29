@@ -60,13 +60,25 @@ public class TicketInspection : MonoBehaviour
         if (pauseManager != null) pauseManager.PauseChanged -= OnPauseChanged;
     }
 
+    // Находит PassengerTicket на самом объекте, его родителях ИЛИ детях.
+    private static PassengerTicket FindPassengerTicket(Transform npc)
+    {
+        if (npc == null) return null;
+        var pt = npc.GetComponentInParent<PassengerTicket>();
+        if (pt == null) pt = npc.GetComponentInChildren<PassengerTicket>();
+        return pt;
+    }
+
     // Открыть проверку для конкретного НПС.
     // onClosed(bool kicked) вызывается после решения игрока: kicked = true, если выгнали.
     public void Begin(Transform npc, System.Action<bool> onClosed)
     {
-        _npc = npc;
         _onClosed = onClosed;
-        _data = npc != null ? npc.GetComponent<PassengerTicket>() : null;
+        // У некоторых НПС тег/коллайдер и PassengerTicket на разных объектах —
+        // ищем компонент по всей иерархии, а не только на кликнутом объекте.
+        _data = FindPassengerTicket(npc);
+        // При «Выгнать» удаляем объект с PassengerTicket (корень НПС), а не дочерний коллайдер.
+        _npc = _data != null ? _data.transform : npc;
 
         if (_data == null)
         {
